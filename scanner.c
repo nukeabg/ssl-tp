@@ -1,54 +1,35 @@
 #include "scanner.h"
 
-void get_token() {
-    char* cadena = malloc(256);
-
+int get_token() {
     char caracter = getchar();
 
     int i = 0;
 
-    while (caracter) {
-        switch (clasificar_caracter(caracter)) {
-            case SEP:
-                printf("Separador: %c\n", caracter);
+    while (isspace(caracter)) {
+        caracter = getchar();
+    }
 
-                break;
-            case CAD:
-                cadena[i] = caracter;  
+    if (formaCadena(caracter)) {
+        do {
+            buffer[i] = caracter;
 
-                i++;
+            i++;
 
-                caracter = getchar();
-
-                if (clasificar_caracter(caracter) == SEP || caracter == '\n' || isspace(caracter)) {
-                    printf("Cadena: %s\n", cadena); 
-
-                    memset(cadena, 0, 256);
-                    
-                    i = 0;
-                } 
-
-                ungetc(caracter, stdin);
-
-                break;
-            case FDT:
-                printf("Fin de texto: %c\n", caracter);
-
-                caracter = 0;
-
-                break;
-        }
-
-        if (caracter) 
             caracter = getchar();
+        } while (formaCadena(caracter));
+
+        ungetc(caracter, stdin);
+
+        return CAD;
+    } else if (caracter == ',') {
+        buffer[i] = caracter;
+
+        return SEP;
+    } else {
+        return FDT;
     }
 }
 
-int clasificar_caracter(char caracter) {
-    if (caracter == ',')
-        return SEP;
-    else if (!isspace(caracter) && caracter != EOF) // El caracter es parte de una cadena
-        return CAD;
-    else if (!isspace(caracter))
-        return FDT;
+int formaCadena(char caracter) {
+    return caracter != ',' && !isspace(caracter) && caracter != EOF;
 }

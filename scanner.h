@@ -3,11 +3,13 @@
 #include <stdlib.h>
 #include <ctype.h>
 
-enum Token { 
-    FDT, 
-    SEP, 
-    CAD 
+enum Token
+{
+    FDT,
+    SEP,
+    CAD
 };
 
-void get_token();
-int clasificar_caracter(char caracter);
+int get_token();
+int formaCadena(char caracter);
+char buffer[256];
